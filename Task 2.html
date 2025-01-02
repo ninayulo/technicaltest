@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Progress Bar</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        #progress-container {
+            width: 150px;
+            height: 150px;
+            position: relative;
+        }
+
+        .progress-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(#4caf50 0deg, #4caf50 0deg, #ddd 0deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-circle span {
+            position: absolute;
+            font-size: 1.5em;
+            color: #333;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="progress-container">
+        <div class="progress-circle" id="progress-circle">
+            <span id="progress-value">75</span>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const progressCircle = document.getElementById("progress-circle");
+            const progressValue = document.getElementById("progress-value");
+
+            function updateProgress() {
+                const value = parseInt(progressValue.textContent, 10);
+
+                // Check if the value is a valid integer between 0 and 100
+                if (!isNaN(value) && value >= 0 && value <= 100) {
+                    // Calculate the degree for the conic-gradient
+                    const degree = (value / 100) * 360;
+
+                    // Update the background style of the progress circle
+                    progressCircle.style.background = `conic-gradient(#4caf50 ${degree}deg, #ddd ${degree}deg)`;
+                } else {
+                    console.error(
+                        "Invalid progress value. Ensure it's an integer between 0 and 100."
+                    );
+                }
+            }
+
+            // Observe changes to the value in the span
+            const observer = new MutationObserver(() => {
+                updateProgress();
+            });
+
+            // Observe the progressValue element for changes
+            observer.observe(progressValue, { childList: true });
+
+            // Initial update
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
